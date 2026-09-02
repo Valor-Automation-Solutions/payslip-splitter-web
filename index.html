@@ -308,7 +308,7 @@ if (!LS_OK) {
 }
 
 /* נקודת ההשוואה: הרשימה שהגיעה בכתובת, ואם אין כזו אז זו שצרובה בקובץ */
-const FILE_LIST = JSON.stringify(HASH_LIST || SEED);
+let FILE_LIST = JSON.stringify(HASH_LIST || SEED);
 window.keepDirty = list => {
   el('keepWarn').style.display = JSON.stringify(list) === FILE_LIST ? 'none' : 'block';
 };
@@ -317,6 +317,15 @@ if (!readTable().length) {
   el('pastePanel').style.display = '';
   el('msg').textContent = 'הרשימה ריקה. אם יש לך קישור עם הרשימה, פתחי אותו. אחרת אפשר להדביק את הרשימה מאקסל בתיבה שלמטה.';
 }
+
+/* אם הדף כבר פתוח ומגיע קישור חדש, הדפדפן מחליף רק את הסולמית בלי לטעון מחדש.
+   בלי זה הרשימה החדשה לא הייתה מופיעה. */
+window.addEventListener('hashchange', () => {
+  const h = listFromHash();
+  if (!h) return;
+  FILE_LIST = JSON.stringify(h);
+  renderTable(h);
+});
 
 el('linkBtn').onclick = () => {
   const list = readTable();

@@ -71,6 +71,9 @@ tr.bad td{background:#fdf0f0;color:#a12b2b;font-weight:600}
         <tbody id="empBody"></tbody>
       </table>
     </div>
+    <div id="emptyBox" class="warn" style="display:none">
+      <b>הרשימה ריקה.</b> הכתובת הזו לבדה לא מכילה את רשימת העובדים. צריך לפתוח את <b>הקישור המלא</b> שכולל אותה, זה שנשמר במועדפים. אם אין לך אותו, אפשר להדביק את הרשימה מאקסל בכפתור <b>הדבקה מאקסל</b>.
+    </div>
     <div class="bar">
       <button class="ghost" id="addRow" type="button">+ הוספת עובד</button>
       <button class="ghost" id="pasteBtn" type="button">הדבקה מאקסל</button>
@@ -309,13 +312,18 @@ if (!LS_OK) {
 
 /* נקודת ההשוואה: הרשימה שהגיעה בכתובת, ואם אין כזו אז זו שצרובה בקובץ */
 let FILE_LIST = JSON.stringify(HASH_LIST || SEED);
+window.emptyBox = list => {
+  const b = el('emptyBox');
+  if (b) b.style.display = list.length ? 'none' : 'block';
+};
 window.keepDirty = list => {
+  window.emptyBox(list);
   el('keepWarn').style.display = JSON.stringify(list) === FILE_LIST ? 'none' : 'block';
 };
 window.keepDirty(readTable());
 if (!readTable().length) {
   el('pastePanel').style.display = '';
-  el('msg').textContent = 'הרשימה ריקה. אם יש לך קישור עם הרשימה, פתחי אותו. אחרת אפשר להדביק את הרשימה מאקסל בתיבה שלמטה.';
+  el('msg').textContent = '';
 }
 
 /* אם הדף כבר פתוח ומגיע קישור חדש, הדפדפן מחליף רק את הסולמית בלי לטעון מחדש.

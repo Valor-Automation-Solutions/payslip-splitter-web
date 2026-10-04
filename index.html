@@ -578,7 +578,7 @@ el('go').addEventListener('click', async () => {
         const r = rows[Number(btn.dataset.i)];
         const a = document.createElement('a');
         a.href = r.url; a.download = r.fn; a.click();
-        const body = 'היי ' + r.name.split(' ').slice(-1)[0] + ',\n\n' +
+        const body = 'היי ' + r.name + ',\n\n' +
                      'מצורף תלוש השכר שלך.\n\nבברכה';
         window.location.href = 'mailto:' + encodeURIComponent(r.email) +
           '?subject=' + encodeURIComponent(SUBJ) + '&body=' + encodeURIComponent(body);
